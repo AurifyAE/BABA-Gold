@@ -34,6 +34,7 @@ setInterval(() => {
 }, 1200);
 
 showTable();
+silverTable();
 
 let askSpread,
   bidSpread,
@@ -325,19 +326,6 @@ async function showTable() {
         purity = purityInput;
       }
 
-      setInterval(() => {
-        var silver = silverValue;
-
-        // Silver 1GM Table Value
-        document.getElementById("silverBidTd").textContent = parseFloat(
-          (parseFloat(silver) + parseFloat(silverBidSpread) || 0) * 1000
-        ).toFixed(3);
-        document.getElementById("silverAskTd").textContent = parseFloat(
-          (parseFloat(silver) + 0.5 + parseFloat(silverAskSpread) || 0) * 1000
-        ).toFixed(3);
-        //console.log(parseFloat(silver));
-      }, 1000);
-
       // Create a new table row for data
       const newRow = document.createElement("tr");
       newRow.innerHTML = `
@@ -387,17 +375,17 @@ async function showTable() {
           newRow.querySelector("#sellAED").innerText = parseFloat(
             (
               goldAskingPrice *
-                unitInput *
-                unitMultiplier *
-                (purityInput / Math.pow(10, purityInput.length)) +
+              unitInput *
+              unitMultiplier *
+              (purityInput / Math.pow(10, purityInput.length)) +
               parseFloat(sellPremium)
             ).toFixed(2)
           );
           newRow.querySelector("#buyAED").innerText = (
             goldBiddingPrice *
-              unitInput *
-              unitMultiplier *
-              (purityInput / Math.pow(10, purityInput.length)) +
+            unitInput *
+            unitMultiplier *
+            (purityInput / Math.pow(10, purityInput.length)) +
             parseFloat(buyPremium)
           ).toFixed(2);
         } else {
@@ -405,18 +393,18 @@ async function showTable() {
           const sellAEDValue = parseFloat(
             (
               goldAskingPrice *
-                unitInput *
-                unitMultiplier *
-                (purityInput / Math.pow(10, purityInput.length)) +
+              unitInput *
+              unitMultiplier *
+              (purityInput / Math.pow(10, purityInput.length)) +
               parseFloat(sellPremium)
             ).toFixed(4)
           );
           const buyAEDValue = parseInt(
             goldBiddingPrice *
-              unitInput *
-              unitMultiplier *
-              (purityInput / Math.pow(10, purityInput.length)) +
-              parseFloat(buyPremium)
+            unitInput *
+            unitMultiplier *
+            (purityInput / Math.pow(10, purityInput.length)) +
+            parseFloat(buyPremium)
           ).toFixed(0);
 
           newRow.querySelector("#sellAED").innerText =
@@ -429,4 +417,21 @@ async function showTable() {
   } catch (error) {
     console.error("Error reading data:", error);
   }
+}
+
+function silverTable() {
+  setInterval(() => {
+
+    // Silver 1GM Table Value
+    const buyValue = parseFloat(
+      (parseFloat(silverBiddingPrice) + parseFloat(silverBidSpread) || 0) * 1000
+    ).toFixed(0);
+    const sellValue = parseFloat(
+      (parseFloat(silverAskingPrice) + 0.05 + parseFloat(silverAskSpread) || 0) * 1000
+    ).toFixed(0);
+
+    document.getElementById("silverBidTd").textContent = buyValue ? buyValue : 0;
+    document.getElementById("silverAskTd").textContent = sellValue ? sellValue : 0;
+    //console.log(parseFloat(silver));
+  }, 500);
 }
